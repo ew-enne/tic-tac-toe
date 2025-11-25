@@ -1,3 +1,7 @@
+# global variables
+full = false # check if grid full
+game_over = false # check if a player has won
+
 class Grid
   def initialize
     @grid = Array.new(3) { Array.new(3, " ") }
@@ -22,48 +26,38 @@ end
 
 
 class Player
-  def initialize(name)
-    @name = name
+  def initialize
+    print "Enter your name: "
+    @name = gets.chomp
+    print "Enter a letter to play with: "
+    @letter = gets.chomp
   end
 
   def play(grid)
     print "#{@name}, enter the row: "
-    row = gets.chomp.to_i
-    print '...the column: '
-    col = gets.chomp.to_i
-    print '...and choose the letter: '
-    letter = gets.chomp
+    row = gets.chomp.to_i - 1
+    print '...and the column: '
+    col = gets.chomp.to_i - 1
+    
     if grid[row, col] == ' '
-      grid[row, col] = letter
+      grid[row, col] = @letter
     end
+    puts grid
   end
+
 end
 
 
 ttt = Grid.new
 
-player_1 = Player.new('Bob')
-player_2 = Player.new('Alice')
-player_1.play(ttt)
-player_2.play(ttt)
+# player_1 = Player.new
+# player_2 = Player.new
 
+players = []
+players[0] = Player.new
+players[1] = Player.new
 
-
-# test entries while entry method not yet implemented
-# --- horizontal win
-# ttt[2, 0] = "o"
-# ttt[2, 1] = "o"
-# ttt[2, 2] = "o"
-# --- vertical win
-# ttt[0, 0] = "o"
-# ttt[1, 0] = "o"
-# ttt[2, 0] = "o"
-# --- diagonal win
-# ttt[2, 0] = "o"
-# ttt[1, 1] = "o"
-# ttt[0, 2] = "o"
-
-puts ttt
+current_player = 0
 
 
 #helper methods to check for win
@@ -77,7 +71,11 @@ def check_vertical_x(grid)
     end    
   end
   if vertical > 0
-    puts 'vertical : x won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
@@ -90,7 +88,11 @@ def check_horizontal_x(grid)
     end
   end
   if horizontal > 0
-    puts 'horizontal : x won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
@@ -103,7 +105,11 @@ def check_vertical_o(grid)
     end
   end
   if vertical > 0
-    puts 'vertical : o won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
@@ -116,35 +122,55 @@ def check_horizontal_o(grid)
     end
   end
   if horizontal > 0
-    puts 'horizontal : o won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
 # helper method to check if x wins diagonally v1
 def check_diagonal_1_x(grid)
   if grid[0, 0] == 'x' && grid[1, 1] == 'x' && grid[2, 2] == 'x'
-    puts 'diagonal 1 : x won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
 # helper method to check if x wins diagonally v2
 def check_diagonal_2_x(grid)
   if grid[2, 0] == 'x' && grid[1, 1] == 'x' && grid[0, 2] == 'x'
-    puts 'diagonal 2 : x won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
 # helper method to check if o wins diagonally v1
 def check_diagonal_1_o(grid)
   if grid[0, 0] == 'o' && grid[1, 1] == 'o' && grid[2, 2] == 'o'
-    puts 'diagonal 1 : o won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
 # helper method to check if o wins diagonally v2
 def check_diagonal_2_o(grid)
   if grid[2, 0] == 'o' && grid[1, 1] == 'o' && grid[0, 2] == 'o'
-    puts 'diagonal 2 : o won!'
+    puts "-----------"
+    puts "You won !!!"
+    puts "-----------"
+    puts ""
+    exit
   end
 end
 
@@ -158,21 +184,35 @@ def check_full(grid)
       end
     end
   end
-  puts "counter = #{counter}"
   if counter == 9
     full = true
-    puts "Sorry, nobody wins!"
-    puts "full = #{full}"
+    puts "---------------"
+    puts "Nobody wins !!!"
+    puts "---------------"
+    puts ""
+    exit
   end
 end  
 
 
-check_vertical_x(ttt)
-check_horizontal_x(ttt)
-check_vertical_o(ttt)
-check_horizontal_o(ttt)
-check_diagonal_1_x(ttt)
-check_diagonal_2_x(ttt)
-check_diagonal_1_o(ttt)
-check_diagonal_2_o(ttt)
-check_full(ttt)
+def check(grid)
+  check_vertical_x(grid)
+  check_horizontal_x(grid)
+  check_vertical_o(grid)
+  check_horizontal_o(grid)
+  check_diagonal_1_x(grid)
+  check_diagonal_2_x(grid)
+  check_diagonal_1_o(grid)
+  check_diagonal_2_o(grid)
+  check_full(grid)
+end
+
+
+while full == false do
+  while game_over == false do
+    players[current_player].play(ttt)
+    check(ttt)
+    current_player = (current_player + 1) % 2
+  end
+  break
+end
