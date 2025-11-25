@@ -22,6 +22,25 @@ end
 
 ttt = Grid.new
 
+class Player
+  def initialize(name)
+    @name = name
+  end
+
+  def play
+    print "#{@name}, enter the row: "
+    row = gets.chomp
+    print '...the column: '
+    col = gets.chomp
+    print '...and the letter: '
+    letter = gets.chomp
+    return [row, col, letter]
+  end
+end
+
+player_1 = Player.new('Bob')
+player_1.play
+
 # test entries while entry method not yet implemented
 # --- horizontal win
 # ttt[2, 0] = "o"
