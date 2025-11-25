@@ -20,26 +20,34 @@ class Grid
 
 end
 
-ttt = Grid.new
 
 class Player
   def initialize(name)
     @name = name
   end
 
-  def play
+  def play(grid)
     print "#{@name}, enter the row: "
-    row = gets.chomp
+    row = gets.chomp.to_i
     print '...the column: '
-    col = gets.chomp
-    print '...and the letter: '
+    col = gets.chomp.to_i
+    print '...and choose the letter: '
     letter = gets.chomp
-    return [row, col, letter]
+    if grid[row, col] == ' '
+      grid[row, col] = letter
+    end
   end
 end
 
+
+ttt = Grid.new
+
 player_1 = Player.new('Bob')
-player_1.play
+player_2 = Player.new('Alice')
+player_1.play(ttt)
+player_2.play(ttt)
+
+
 
 # test entries while entry method not yet implemented
 # --- horizontal win
@@ -51,9 +59,9 @@ player_1.play
 # ttt[1, 0] = "o"
 # ttt[2, 0] = "o"
 # --- diagonal win
-ttt[2, 0] = "o"
-ttt[1, 1] = "o"
-ttt[0, 2] = "o"
+# ttt[2, 0] = "o"
+# ttt[1, 1] = "o"
+# ttt[0, 2] = "o"
 
 puts ttt
 
@@ -140,6 +148,25 @@ def check_diagonal_2_o(grid)
   end
 end
 
+# helper method to check if grid is full
+def check_full(grid)
+  counter = 0
+  for i in 0..2 do
+    for j in 0..2 do
+      if grid[i, j] != ' '
+        counter +=1
+      end
+    end
+  end
+  puts "counter = #{counter}"
+  if counter == 9
+    full = true
+    puts "Sorry, nobody wins!"
+    puts "full = #{full}"
+  end
+end  
+
+
 check_vertical_x(ttt)
 check_horizontal_x(ttt)
 check_vertical_o(ttt)
@@ -148,3 +175,4 @@ check_diagonal_1_x(ttt)
 check_diagonal_2_x(ttt)
 check_diagonal_1_o(ttt)
 check_diagonal_2_o(ttt)
+check_full(ttt)
