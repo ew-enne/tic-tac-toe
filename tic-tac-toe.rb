@@ -1,6 +1,3 @@
-# global variables
-full = false # check if grid full
-game_over = false # check if a player has won
 
 module Check
 #helper methods to check for win
@@ -176,6 +173,7 @@ end
 
 
 class Player
+
   def initialize
     print "Enter your name: "
     @name = gets.chomp
@@ -197,26 +195,27 @@ class Player
 
 end
 
+class Game
+  include Check
 
-ttt = Grid.new
+  game = Game.new
+  ttt = Grid.new
+  full = false # check if grid full
+  game_over = false # check if a player has won
 
-# player_1 = Player.new
-# player_2 = Player.new
-
-players = []
-players[0] = Player.new
-players[1] = Player.new
-
-current_player = 0
-
-
-
-
-while full == false do
-  while game_over == false do
-    players[current_player].play(ttt)
-    check(ttt)
-    current_player = (current_player + 1) % 2
+  players = []
+  players[0] = Player.new
+  players[1] = Player.new
+  
+  current_player = 0
+  
+  while full == false do
+    while game_over == false do
+      players[current_player].play(ttt)
+      game.check(ttt)
+      current_player = (current_player + 1) % 2
+    end
+    break
   end
-  break
 end
+
