@@ -2,6 +2,156 @@
 full = false # check if grid full
 game_over = false # check if a player has won
 
+module Check
+#helper methods to check for win
+
+  # helper method to check if x wins vertically
+  def check_vertical_x(grid)
+    vertical = 0
+    for i in 0..2 do
+      if grid[0, i] == 'x' && grid[1, i] == 'x' && grid[2, i] == 'x'
+        vertical += 1
+      end    
+    end
+    if vertical > 0
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if x wins horizontally
+  def check_horizontal_x(grid)
+    horizontal = 0
+    for i in 0..2 do
+      if grid[i, 0] == 'x' && grid[i, 1] == 'x' && grid[i, 2] == 'x'
+        horizontal += 1
+      end
+    end
+    if horizontal > 0
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if o wins vertically
+  def check_vertical_o(grid)
+    vertical = 0 
+    for i in 0..2 do
+      if grid[0, i] == 'o' && grid[1, i] == 'o' && grid[2, i] == 'o'
+        vertical += 1
+      end
+    end
+    if vertical > 0
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if o wins horizontally
+  def check_horizontal_o(grid)
+    horizontal = 0
+    for i in 0..2 do
+      if grid[i, 0] == 'o' && grid[i, 1] == 'o' && grid[i, 2] == 'o'
+        horizontal += 1
+      end
+    end
+    if horizontal > 0
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if x wins diagonally v1
+  def check_diagonal_1_x(grid)
+    if grid[0, 0] == 'x' && grid[1, 1] == 'x' && grid[2, 2] == 'x'
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if x wins diagonally v2
+  def check_diagonal_2_x(grid)
+    if grid[2, 0] == 'x' && grid[1, 1] == 'x' && grid[0, 2] == 'x'
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if o wins diagonally v1
+  def check_diagonal_1_o(grid)
+    if grid[0, 0] == 'o' && grid[1, 1] == 'o' && grid[2, 2] == 'o'
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if o wins diagonally v2
+  def check_diagonal_2_o(grid)
+    if grid[2, 0] == 'o' && grid[1, 1] == 'o' && grid[0, 2] == 'o'
+      puts "-----------"
+      puts "You won !!!"
+      puts "-----------"
+      puts ""
+      exit
+    end
+  end
+
+  # helper method to check if grid is full
+  def check_full(grid)
+    counter = 0
+    for i in 0..2 do
+      for j in 0..2 do
+        if grid[i, j] != ' '
+          counter +=1
+        end
+      end
+    end
+    if counter == 9
+      full = true
+      puts "---------------"
+      puts "Nobody wins !!!"
+      puts "---------------"
+      puts ""
+      exit
+    end
+  end
+
+  def check(grid)
+    check_vertical_x(grid)
+    check_horizontal_x(grid)
+    check_vertical_o(grid)
+    check_horizontal_o(grid)
+    check_diagonal_1_x(grid)
+    check_diagonal_2_x(grid)
+    check_diagonal_1_o(grid)
+    check_diagonal_2_o(grid)
+    check_full(grid)
+  end
+
+end
+
+
 class Grid
   def initialize
     @grid = Array.new(3) { Array.new(3, " ") }
@@ -60,152 +210,6 @@ players[1] = Player.new
 current_player = 0
 
 
-#helper methods to check for win
-
-# helper method to check if x wins vertically
-def check_vertical_x(grid)
-  vertical = 0
-  for i in 0..2 do
-    if grid[0, i] == 'x' && grid[1, i] == 'x' && grid[2, i] == 'x'
-      vertical += 1
-    end    
-  end
-  if vertical > 0
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if x wins horizontally
-def check_horizontal_x(grid)
-  horizontal = 0
-  for i in 0..2 do
-    if grid[i, 0] == 'x' && grid[i, 1] == 'x' && grid[i, 2] == 'x'
-      horizontal += 1
-    end
-  end
-  if horizontal > 0
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if o wins vertically
-def check_vertical_o(grid)
-  vertical = 0 
-  for i in 0..2 do
-    if grid[0, i] == 'o' && grid[1, i] == 'o' && grid[2, i] == 'o'
-      vertical += 1
-    end
-  end
-  if vertical > 0
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if o wins horizontally
-def check_horizontal_o(grid)
-  horizontal = 0
-  for i in 0..2 do
-    if grid[i, 0] == 'o' && grid[i, 1] == 'o' && grid[i, 2] == 'o'
-      horizontal += 1
-    end
-  end
-  if horizontal > 0
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if x wins diagonally v1
-def check_diagonal_1_x(grid)
-  if grid[0, 0] == 'x' && grid[1, 1] == 'x' && grid[2, 2] == 'x'
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if x wins diagonally v2
-def check_diagonal_2_x(grid)
-  if grid[2, 0] == 'x' && grid[1, 1] == 'x' && grid[0, 2] == 'x'
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if o wins diagonally v1
-def check_diagonal_1_o(grid)
-  if grid[0, 0] == 'o' && grid[1, 1] == 'o' && grid[2, 2] == 'o'
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if o wins diagonally v2
-def check_diagonal_2_o(grid)
-  if grid[2, 0] == 'o' && grid[1, 1] == 'o' && grid[0, 2] == 'o'
-    puts "-----------"
-    puts "You won !!!"
-    puts "-----------"
-    puts ""
-    exit
-  end
-end
-
-# helper method to check if grid is full
-def check_full(grid)
-  counter = 0
-  for i in 0..2 do
-    for j in 0..2 do
-      if grid[i, j] != ' '
-        counter +=1
-      end
-    end
-  end
-  if counter == 9
-    full = true
-    puts "---------------"
-    puts "Nobody wins !!!"
-    puts "---------------"
-    puts ""
-    exit
-  end
-end  
-
-
-def check(grid)
-  check_vertical_x(grid)
-  check_horizontal_x(grid)
-  check_vertical_o(grid)
-  check_horizontal_o(grid)
-  check_diagonal_1_x(grid)
-  check_diagonal_2_x(grid)
-  check_diagonal_1_o(grid)
-  check_diagonal_2_o(grid)
-  check_full(grid)
-end
 
 
 while full == false do
