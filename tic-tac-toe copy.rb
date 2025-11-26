@@ -113,17 +113,6 @@ module Check
       exit
     end
   end
-  
-  def check(grid)
-    check_vertical_x(grid)
-    check_horizontal_x(grid)
-    check_vertical_o(grid)
-    check_horizontal_o(grid)
-    check_diagonal_1_x(grid)
-    check_diagonal_2_x(grid)
-    check_diagonal_1_o(grid)
-    check_diagonal_2_o(grid)
-  end
 
   # helper method to check if grid is full
   def check_full(grid)
@@ -136,6 +125,7 @@ module Check
       end
     end
     if counter == 9
+      full = true
       puts "---------------"
       puts "Nobody wins !!!"
       puts "---------------"
@@ -143,8 +133,21 @@ module Check
       exit
     end
   end
+  
+  def check(grid)
+    check_vertical_x(grid)
+    check_horizontal_x(grid)
+    check_vertical_o(grid)
+    check_horizontal_o(grid)
+    check_diagonal_1_x(grid)
+    check_diagonal_2_x(grid)
+    check_diagonal_1_o(grid)
+    check_diagonal_2_o(grid)
+    check_full(grid)
+  end
 
 end
+
 
 class Grid
   def initialize
@@ -170,93 +173,61 @@ end
 
 
 class Player
-  attr_accessor :name, :letter
 
   def initialize
-    print "enter your name: "
+    print "Enter your name: "
     @name = gets.chomp
     # print "Enter a letter to play with: "
     # @letter = gets.chomp
+
   end
+
+  #getter method to check if cell is empty
+  def empty_cell
+    @empty_cell
+  end
+
+  def play(grid)
+    print "#{@name}, enter the row: "
+    row = gets.chomp.to_i - 1
+    print '...and the column: '
+    col = gets.chomp.to_i - 1
+    
+    if grid[row, col] == ' '
+      grid[row, col] = @letter
+      @empty_cell = true
+    else
+      puts "Please choose a different coordinate!"
+      @empty_cell = false
+    end
+    puts grid
+  end
+
 end
 
 class Game
   include Check
 
-  LETTERS = ['x', 'o']
+  game = Game.new
+  ttt = Grid.new
+  full = false # check if grid full
+  game_over = false # check if a player has won
 
-  attr_reader :players, :current_player
-
-  def initialize
-    @players = []
-    @current_player = 0
-    create_players
-    assign_letters
-  end
-
-  def create_players
-    puts ''
-    print 'Player 1, '
-    @players[0] = Player.new
-
-    print 'Player 2, '
-    @players[1] = Player.new
-  end
-
-  def assign_letters
-    letters = LETTERS.shuffle
-
-    @players[0].letter = letters[0]
-    @players[1].letter = letters[1]
-
-    puts ''
-    puts "#{@players[0].name} gets: #{@players[0].letter}"
-    puts "#{@players[1].name} gets: #{@players[1].letter}"
-  end
-
-  def play(grid)
-    game_over = false
-    
-    until game_over
-      puts "\n#{@players[@current_player].name}, it's your turn:"
-
-      # aks for input
-      print 'Row (1-3): '
-      row = gets.chomp.to_i - 1
-      print 'Column (1-3) : '
-      col = gets.chomp.to_i - 1
-
-      # validate move
-      if grid[row, col] != ' '
-        puts 'Cell aleady taken! Try again.'
-        next
+  players = []
+  players[0] = Player.new
+  players[1] = Player.new
+  
+  current_player = 0
+  
+  while full == false do
+    while game_over == false do
+      players[current_player].play(ttt)
+      if players[current_player].empty_cell != false
+        game.check(ttt)
+        current_player = (current_player + 1) % 2
       end
-
-      # place the move
-      grid[row, col] = @players[current_player].letter
-      puts grid
-
-      # check win
-      if check(grid)
-        puts "#{@players[current_player].name} wins!"
-        game_over = true
-        next
-      end
-
-      # check draw
-      if check_full(grid)
-        puts "It's a draw"
-        game_over = true
-        next
-      end
-
-      # switch player
-      @current_player = 1 - @current_player
-
-    end    
+    end
+    break
   end
 end
 
-game = Game.new
-grid = Grid.new
-game.play(grid)
