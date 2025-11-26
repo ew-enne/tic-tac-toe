@@ -133,7 +133,7 @@ module Check
       exit
     end
   end
-
+  
   def check(grid)
     check_vertical_x(grid)
     check_horizontal_x(grid)
@@ -181,6 +181,10 @@ class Player
     @letter = gets.chomp
   end
 
+  def empty_cell
+    @empty_cell
+  end
+
   def play(grid)
     print "#{@name}, enter the row: "
     row = gets.chomp.to_i - 1
@@ -189,6 +193,10 @@ class Player
     
     if grid[row, col] == ' '
       grid[row, col] = @letter
+      @empty_cell = true
+    else
+      puts "Please choose a different coordinate!"
+      @empty_cell = false
     end
     puts grid
   end
@@ -212,8 +220,10 @@ class Game
   while full == false do
     while game_over == false do
       players[current_player].play(ttt)
-      game.check(ttt)
-      current_player = (current_player + 1) % 2
+      if players[current_player].empty_cell != false
+        game.check(ttt)
+        current_player = (current_player + 1) % 2
+      end
     end
     break
   end
